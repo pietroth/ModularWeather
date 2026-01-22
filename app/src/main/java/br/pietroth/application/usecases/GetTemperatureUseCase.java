@@ -12,13 +12,7 @@ public class GetTemperatureUseCase {
 
     public TemperatureData getTemperature()
     {
-        try {
-            TemperatureData response = weatherProvider.getTemperature();
-            return response;
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        TemperatureData response = weatherProvider.getTemperature();
+        return response;
     }
 }

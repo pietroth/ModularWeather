@@ -2,10 +2,8 @@ package br.pietroth.infrastructure.adapters;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.pietroth.application.ConfigurationStore;
+import br.pietroth.domain.UserKeyStore;
 import br.pietroth.domain.services.WeatherProvider;
 import br.pietroth.domain.valueobjects.TemperatureData;
 import br.pietroth.infrastructure.WeatherHttpClient;
@@ -14,14 +12,12 @@ import br.pietroth.infrastructure.models.Url;
 
 public class OpenWeatherMapAdapter implements WeatherProvider {
     private final WeatherHttpClient httpClient;
-    private ConfigurationStore<String, String> configurationStore;
 
     String city = "São Paulo";
     String encodedCity = URLEncoder.encode(city, StandardCharsets.UTF_8);
 
-    public OpenWeatherMapAdapter(ConfigurationStore<String, String> configurationStore, String ApiProp) {
-        this.configurationStore = configurationStore;
-        String userKey = configurationStore
+    public OpenWeatherMapAdapter(UserKeyStore<String, String> userKeyManager, String ApiProp) {
+        String userKey = userKeyManager
                 .get(ApiProp)
                 .orElseThrow(() ->
                     new IllegalStateException(

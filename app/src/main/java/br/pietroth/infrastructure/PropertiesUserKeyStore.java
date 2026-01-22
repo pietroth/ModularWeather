@@ -1,20 +1,20 @@
 package br.pietroth.infrastructure;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Optional;
 import java.util.Properties;
-import br.pietroth.application.ConfigurationStore;
 
-public class PropertiesConfigurantionStore 
-    implements ConfigurationStore<String, String> {
+import br.pietroth.domain.UserKeyStore;
+
+public class PropertiesUserKeyStore 
+    implements UserKeyStore<String, String> {
 
     private Properties properties;
     private final String configFilePath = "./properties/config.properties";
 
-    public PropertiesConfigurantionStore() {
+    public PropertiesUserKeyStore() {
         this.properties = new Properties();
         
         try (InputStream is = getClass()
@@ -40,7 +40,7 @@ public class PropertiesConfigurantionStore
     }
 
     @Override
-    public void save(String key, String value) {
+    public void register(String key, String value) {
         properties.setProperty(key, value);
 
         try (FileOutputStream fos = new FileOutputStream(configFilePath)) {
@@ -52,13 +52,7 @@ public class PropertiesConfigurantionStore
     }
 
     @Override
-    public void remove(String key) {
-        save(key, "");
+    public void revoke(String key) {
+        register(key, "");
     }
-
-    @Override
-    public void update(String key, String value) {
-        save(key, value);
-    }
-    
 }

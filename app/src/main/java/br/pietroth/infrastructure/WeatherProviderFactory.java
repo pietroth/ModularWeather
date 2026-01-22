@@ -22,11 +22,11 @@ public class WeatherProviderFactory {
     }
 
     private OpenWeatherMapAdapter createOpenWeatherMapAdapter() {
-        PropertiesConfigurantionStore propertiesConfigurantionStore = 
-            new PropertiesConfigurantionStore();
+        PropertiesUserKeyStore propertiesUserKeyManager = 
+            new PropertiesUserKeyStore();
 
         return new OpenWeatherMapAdapter
-            (propertiesConfigurantionStore, "user.key.open_weather_map");
+            (propertiesUserKeyManager, "user.key.open_weather_map");
     }
 
     public WeatherProvider getProvider(int option) {

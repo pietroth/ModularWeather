@@ -19,3 +19,4 @@ build/
 # SO
 .DS_Store
 
+.app/bin/
