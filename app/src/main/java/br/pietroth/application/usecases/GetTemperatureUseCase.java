@@ -1,5 +1,7 @@
 package br.pietroth.application.usecases;
 
+import java.util.concurrent.CompletableFuture;
+
 import br.pietroth.domain.services.WeatherProvider;
 import br.pietroth.domain.valueobjects.TemperatureData;
 
@@ -10,9 +12,8 @@ public class GetTemperatureUseCase {
         this.weatherProvider = weatherProvider;
     }
 
-    public TemperatureData getTemperature()
+    public CompletableFuture<TemperatureData> getTemperatureAsync()
     {
-        TemperatureData response = weatherProvider.getTemperature();
-        return response;
+        return weatherProvider.getTemperatureAsync();
     }
 }

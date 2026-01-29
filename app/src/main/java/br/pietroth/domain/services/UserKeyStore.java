@@ -1,4 +1,4 @@
-package br.pietroth.domain;
+package br.pietroth.domain.services;
 
 import java.util.Optional;
 

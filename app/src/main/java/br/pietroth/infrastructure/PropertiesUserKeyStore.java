@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.Properties;
 
-import br.pietroth.domain.UserKeyStore;
+import br.pietroth.domain.services.UserKeyStore;
 
 public class PropertiesUserKeyStore 
     implements UserKeyStore<String, String> {

@@ -1,4 +1,4 @@
-package br.pietroth.domain.models;
+package br.pietroth.domain.valueobjects;
 
 public class Coordinates {
     private final double latitude;

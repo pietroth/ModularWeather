@@ -1,44 +1,29 @@
 package br.pietroth.infrastructure;
 
+import br.pietroth.domain.services.UserKeyStore;
 import br.pietroth.domain.services.WeatherProvider;
 import br.pietroth.infrastructure.adapters.OpenWeatherMapAdapter;
 
 public class WeatherProviderFactory {
-    private enum Adapters {
-        OPEN_WEATHER_MAP(1);
-
-        private final int value;
-
-        Adapters(int value) {
-            this.value = value;
-        }
-
-        public static Adapters getFromInteger(int value) {
-            for (Adapters a : Adapters.values()) {
-                if (a.value == value) return a;
-            } 
-            throw new IllegalArgumentException("Valor inválido : " + value);
-        }
+    public static enum Adapters {
+        OPEN_WEATHER_MAP;
     }
 
-    private OpenWeatherMapAdapter createOpenWeatherMapAdapter() {
-        PropertiesUserKeyStore propertiesUserKeyManager = 
-            new PropertiesUserKeyStore();
-
+    private OpenWeatherMapAdapter createOpenWeatherMapAdapter(UserKeyStore<String, String> userKeyStore) {
         return new OpenWeatherMapAdapter
-            (propertiesUserKeyManager, "user.key.open_weather_map");
+            (userKeyStore, "user.key.open_weather_map");
     }
 
-    public WeatherProvider getProvider(int option) {
-        Adapters adapter = Adapters.getFromInteger(option);
+    public WeatherProvider getProvider(Adapters adapter) {
+        UserKeyStore<String, String> defaultUserKeyStore = new PropertiesUserKeyStore();
 
         switch (adapter) {
             case OPEN_WEATHER_MAP:
-                return createOpenWeatherMapAdapter();
+                return createOpenWeatherMapAdapter(defaultUserKeyStore);
         
             default:
                 System.out.println("Valor inválido! Utilizando OpenWeatherMap como padrão.");
-                return createOpenWeatherMapAdapter();
+                return createOpenWeatherMapAdapter(defaultUserKeyStore);
         }
     }
 }

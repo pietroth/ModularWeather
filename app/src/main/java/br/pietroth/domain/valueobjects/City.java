@@ -1,4 +1,4 @@
-package br.pietroth.domain.models;
+package br.pietroth.domain.valueobjects;
 
 public class City {
     private final String name;
