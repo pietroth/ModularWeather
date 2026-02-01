@@ -12,8 +12,8 @@ public class GetTemperatureUseCase {
         this.weatherProvider = weatherProvider;
     }
 
-    public CompletableFuture<TemperatureData> getTemperatureAsync()
+    public CompletableFuture<TemperatureData> getTemperatureAsync(String city)
     {
-        return weatherProvider.getTemperatureAsync();
+        return weatherProvider.getTemperatureAsync(city);
     }
 }

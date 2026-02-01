@@ -5,13 +5,14 @@ import br.pietroth.domain.services.WeatherProvider;
 import br.pietroth.infrastructure.adapters.OpenWeatherMapAdapter;
 
 public class WeatherProviderFactory {
+    private final String defaultApiProp = "user.key.rapidapi_key";
     public static enum Adapters {
         OPEN_WEATHER_MAP;
     }
 
     private OpenWeatherMapAdapter createOpenWeatherMapAdapter(UserKeyStore<String, String> userKeyStore) {
         return new OpenWeatherMapAdapter
-            (userKeyStore, "user.key.open_weather_map");
+            (userKeyStore, defaultApiProp);
     }
 
     public WeatherProvider getProvider(Adapters adapter) {

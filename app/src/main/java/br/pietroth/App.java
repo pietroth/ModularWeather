@@ -25,7 +25,7 @@ public class App {
 
         provider = providerFactory.getProvider(adapter);
         weatherService = new GetTemperatureUseCase(provider);
-        weatherService.getTemperatureAsync()
+        weatherService.getTemperatureAsync("São Paulo")
             .thenAccept(response -> {
                 System.out.println(
                     String.format("Temperatura atual: %.1f°C; Mínima: %.1f°C; Máxima: %.1f°C", 

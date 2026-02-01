@@ -11,47 +11,50 @@ import br.pietroth.domain.valueobjects.TemperatureData;
 import br.pietroth.infrastructure.SimpleHttpClient;
 import br.pietroth.infrastructure.models.OpenWeatherMapResponse;
 import br.pietroth.infrastructure.models.Url;
+import java.util.Map;
 
 public class OpenWeatherMapAdapter implements WeatherProvider {
-    private final SimpleHttpClient httpClient;
-
-    String city = "São Paulo";
-    String encodedCity = URLEncoder.encode(city, StandardCharsets.UTF_8);
+    private String userKey;
 
     public OpenWeatherMapAdapter(UserKeyStore<String, String> userKeyManager, String ApiProp) {
-        String userKey = userKeyManager
+        this.userKey = userKeyManager
                 .get(ApiProp)
                 .orElseThrow(() ->
                     new IllegalStateException(
                         "API key não configurada para: " + ApiProp
                     )
                 );
-
-        Url url = new Url(
-            "https://api.openweathermap.org/data/2.5/weather" +
-            "?q=" + encodedCity +
-            "&appid=" + userKey +
-            "&units=metric" +
-            "&lang=pt_br"
-        );
-        System.out.println(url.getUrl());
-
-        httpClient = new SimpleHttpClient(url);
     }
 
     @Override
-    public CompletableFuture<TemperatureData> getTemperatureAsync() {
-        return httpClient.getAsync()
+    public CompletableFuture<TemperatureData> getTemperatureAsync(String city) {
+        String encodedCity = URLEncoder.encode(city, StandardCharsets.UTF_8);
+        Url url = new Url(
+            "https://open-weather13.p.rapidapi.com/" +
+            "city?city=" + encodedCity +
+            "&lang=pt_br"
+        );
+
+        Map<String, String> headers = Map.of(
+            "Accept", "application/json",
+            "x-rapidapi-key", this.userKey,
+            "x-rapidapi-host", "open-weather13.p.rapidapi.com"
+        );
+
+        SimpleHttpClient httpClient = new SimpleHttpClient(url);
+        return httpClient.getAsync(headers)
             .thenApply(json -> {
                 try {
+                    // Json parsing
                     ObjectMapper mapper = new ObjectMapper();
                     OpenWeatherMapResponse response = 
                         mapper.readValue(json, OpenWeatherMapResponse.class);
 
                     return new TemperatureData(
-                        response.main.temp,
-                        response.main.temp_max,
-                        response.main.temp_min
+                        // Fahrenheit to Celsius
+                        (response.main.temp - 32) * 5 / 9,
+                        (response.main.temp_max - 32) * 5 / 9,
+                        (response.main.temp_min - 32) * 5 / 9
                     );
                 
                 } catch (Exception e)
