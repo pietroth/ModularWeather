@@ -17,7 +17,7 @@ public class App {
             case "1":
                 adapter = WeatherProviderFactory.Adapters.OPEN_WEATHER_MAP;
                 break;
-        
+
             default:
                 adapter = WeatherProviderFactory.Adapters.OPEN_WEATHER_MAP;
                 break;
@@ -25,13 +25,19 @@ public class App {
 
         provider = providerFactory.getProvider(adapter);
         weatherService = new GetTemperatureUseCase(provider);
-        weatherService.getTemperatureAsync("São Paulo")
+        weatherService.getWeatherContentAsync("Nova Iorque")
             .thenAccept(response -> {
                 System.out.println(
-                    String.format("Temperatura atual: %.1f°C; Mínima: %.1f°C; Máxima: %.1f°C", 
-                    response.getCurrent(), 
-                    response.getMinimum(), 
-                    response.getMaximum()));
+                    String.format(
+                        "Temperatura atual: %.1f°C; Máxima: %.1f°C; Mínima: %.1f°C; Vento: %.1f km/h; Ângulo: %.0f°; Descrição: %s",
+                        response.getTemperatureData().getCurrent(),
+                        response.getTemperatureData().getMaximum(),
+                        response.getTemperatureData().getMinimum(),
+                        response.getWindData().getSpeed(),
+                        response.getWindData().getDirection(),
+                        response.getDescription()
+                    )
+                );
             })
             .exceptionally(ex -> {
                 System.err.println("Erro ao obter dados meteorológicos: " + ex.getMessage());
