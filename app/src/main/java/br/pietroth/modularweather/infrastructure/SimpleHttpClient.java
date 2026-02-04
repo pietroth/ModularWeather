@@ -1,4 +1,4 @@
-package br.pietroth.infrastructure;
+package br.pietroth.modularweather.infrastructure;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.CompletableFuture;
 import java.util.Map;
-import br.pietroth.infrastructure.models.Url;
+import br.pietroth.modularweather.infrastructure.models.Url;
 
 public class SimpleHttpClient {
     private final Url url;
@@ -32,3 +32,4 @@ public class SimpleHttpClient {
             .thenApply(HttpResponse::body);
     }
 }
+

@@ -1,4 +1,4 @@
-package br.pietroth.infrastructure;
+package br.pietroth.modularweather.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,3 +19,4 @@ public class SimpleJsonParser<T> {
         }
     }
 }
+

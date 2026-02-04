@@ -1,16 +1,16 @@
-package br.pietroth.application.usecases;
+package br.pietroth.modularweather.application.usecases;
 
 import java.util.concurrent.CompletableFuture;
 
-import br.pietroth.domain.services.WeatherProvider;
-import br.pietroth.domain.valueobjects.TemperatureData;
-import br.pietroth.domain.valueobjects.WeatherContent;
-import br.pietroth.domain.valueobjects.WindData;
+import br.pietroth.modularweather.domain.services.WeatherProvider;
+import br.pietroth.modularweather.domain.valueobjects.TemperatureData;
+import br.pietroth.modularweather.domain.valueobjects.WeatherContent;
+import br.pietroth.modularweather.domain.valueobjects.WindData;
 
-public class GetTemperatureUseCase {
+public class FetchWeatherUseCase {
     private WeatherProvider weatherProvider;
 
-    public GetTemperatureUseCase(WeatherProvider weatherProvider) {
+    public FetchWeatherUseCase(WeatherProvider weatherProvider) {
         this.weatherProvider = weatherProvider;
     }
 
@@ -38,3 +38,4 @@ public class GetTemperatureUseCase {
         return weatherProvider;
     }
 }
+

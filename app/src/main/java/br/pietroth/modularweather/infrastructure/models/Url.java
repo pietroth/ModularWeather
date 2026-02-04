@@ -1,4 +1,4 @@
-package br.pietroth.infrastructure.models;
+package br.pietroth.modularweather.infrastructure.models;
 
 public class Url {
     private String url;
@@ -20,3 +20,4 @@ public class Url {
         // Not Implemented
     }
 }
+

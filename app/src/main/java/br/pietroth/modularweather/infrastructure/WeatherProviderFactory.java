@@ -1,8 +1,8 @@
-package br.pietroth.infrastructure;
+package br.pietroth.modularweather.infrastructure;
 
-import br.pietroth.domain.services.UserKeyStore;
-import br.pietroth.domain.services.WeatherProvider;
-import br.pietroth.infrastructure.adapters.OpenWeatherMapAdapter;
+import br.pietroth.modularweather.domain.services.UserKeyStore;
+import br.pietroth.modularweather.domain.services.WeatherProvider;
+import br.pietroth.modularweather.infrastructure.adapters.OpenWeatherMapAdapter;
 
 public class WeatherProviderFactory {
     private final String defaultApiProp = "user.key.rapidapi_key";
@@ -28,3 +28,4 @@ public class WeatherProviderFactory {
         }
     }
 }
+

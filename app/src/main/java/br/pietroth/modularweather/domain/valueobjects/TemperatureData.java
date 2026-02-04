@@ -1,4 +1,4 @@
-package br.pietroth.domain.valueobjects;
+package br.pietroth.modularweather.domain.valueobjects;
 
 public class TemperatureData {
     private final double current;
@@ -23,3 +23,4 @@ public class TemperatureData {
         return min;
     }
 }
+

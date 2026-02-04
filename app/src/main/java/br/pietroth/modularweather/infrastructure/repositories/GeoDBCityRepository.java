@@ -1,8 +1,8 @@
-package br.pietroth.infrastructure.repositories;
+package br.pietroth.modularweather.infrastructure.repositories;
 
 import java.util.List;
-import br.pietroth.domain.repositories.CityRepository;
-import br.pietroth.domain.valueobjects.City;
+import br.pietroth.modularweather.domain.repositories.CityRepository;
+import br.pietroth.modularweather.domain.valueobjects.City;
 
 public class GeoDBCityRepository implements CityRepository {
     
@@ -17,3 +17,4 @@ public class GeoDBCityRepository implements CityRepository {
     }
     
 }
+

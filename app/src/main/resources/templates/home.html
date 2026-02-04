@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Modular Weather</title>
+  </head>
+  <body>
+    <h1>Previsão do tempo com Modular Weather</h1>
+    <form method="get" action="/">
+      <label for="city">Cidade</label>
+      <input id="city" name="city" type="text" th:value="${city}" />
+      <button type="submit">Buscar</button>
+    </form>
+
+    <div th:if="${hasError}">
+      <p>Falha ao obter o clima.</p>
+      <pre th:text="${errorMessage}"></pre>
+    </div>
+
+    <div th:if="${!hasError}">
+      <h2 th:text="'Clima em ' + ${city}"></h2>
+      <p th:text="'Descricao: ' + ${description}"></p>
+      <ul>
+        <li th:text="'Temperatura atual: ' + ${#numbers.formatDecimal(tempCurrent, 1, 2)} + ' °C'"></li>
+        <li th:text="'Máxima: ' + ${#numbers.formatDecimal(tempMax, 1, 2)} + ' °C'"></li>
+        <li th:text="'Mínima: ' + ${#numbers.formatDecimal(tempMin, 1, 2)} + ' °C'"></li>
+        <li th:text="'Vento: ' + ${windSpeed} + ' km/h'"></li>
+        <li th:text="'Direção: ' + ${windDirection} + ' graus'"></li>
+      </ul>
+    </div>
+  </body>
+</html>

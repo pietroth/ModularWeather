@@ -1,4 +1,4 @@
-package br.pietroth.infrastructure.models;
+package br.pietroth.modularweather.infrastructure.models;
 
 import java.util.List;
 
@@ -28,3 +28,4 @@ public class OpenWeatherMapResponse {
         public String description;
     }
 }
+

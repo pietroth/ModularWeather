@@ -1,21 +1,19 @@
-package br.pietroth.infrastructure.adapters;
+package br.pietroth.modularweather.infrastructure.adapters;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.CompletableFuture;
 import java.util.Map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.pietroth.domain.services.UserKeyStore;
-import br.pietroth.domain.services.WeatherProvider;
-import br.pietroth.domain.valueobjects.TemperatureData;
-import br.pietroth.domain.valueobjects.WeatherContent;
-import br.pietroth.domain.valueobjects.WindData;
-import br.pietroth.infrastructure.SimpleHttpClient;
-import br.pietroth.infrastructure.SimpleJsonParser;
-import br.pietroth.infrastructure.models.OpenWeatherMapResponse;
-import br.pietroth.infrastructure.models.Url;
+import br.pietroth.modularweather.domain.services.UserKeyStore;
+import br.pietroth.modularweather.domain.services.WeatherProvider;
+import br.pietroth.modularweather.domain.valueobjects.TemperatureData;
+import br.pietroth.modularweather.domain.valueobjects.WeatherContent;
+import br.pietroth.modularweather.domain.valueobjects.WindData;
+import br.pietroth.modularweather.infrastructure.SimpleHttpClient;
+import br.pietroth.modularweather.infrastructure.SimpleJsonParser;
+import br.pietroth.modularweather.infrastructure.models.OpenWeatherMapResponse;
+import br.pietroth.modularweather.infrastructure.models.Url;
 
 
 public class OpenWeatherMapAdapter implements WeatherProvider {

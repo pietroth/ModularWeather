@@ -1,4 +1,4 @@
-package br.pietroth.infrastructure;
+package br.pietroth.modularweather.infrastructure;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -6,7 +6,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import java.util.Properties;
 
-import br.pietroth.domain.services.UserKeyStore;
+import br.pietroth.modularweather.domain.services.UserKeyStore;
 
 public class PropertiesUserKeyStore 
     implements UserKeyStore<String, String> {
@@ -56,3 +56,4 @@ public class PropertiesUserKeyStore
         register(key, "");
     }
 }
+

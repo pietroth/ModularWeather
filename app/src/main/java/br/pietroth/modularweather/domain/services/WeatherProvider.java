@@ -1,10 +1,10 @@
-package br.pietroth.domain.services;
+package br.pietroth.modularweather.domain.services;
 
 import java.util.concurrent.CompletableFuture;
 
-import br.pietroth.domain.valueobjects.TemperatureData;
-import br.pietroth.domain.valueobjects.WeatherContent;
-import br.pietroth.domain.valueobjects.WindData;
+import br.pietroth.modularweather.domain.valueobjects.TemperatureData;
+import br.pietroth.modularweather.domain.valueobjects.WeatherContent;
+import br.pietroth.modularweather.domain.valueobjects.WindData;
 
 public interface WeatherProvider {
     CompletableFuture<TemperatureData> getTemperatureAsync(String city);
@@ -12,3 +12,4 @@ public interface WeatherProvider {
     CompletableFuture<String> getWeatherDescriptionAsync(String city);
     CompletableFuture<WeatherContent> getWeatherContentAsync(String city);
 }
+

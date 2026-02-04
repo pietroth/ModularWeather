@@ -1,4 +1,4 @@
-package br.pietroth.domain.valueobjects;
+package br.pietroth.modularweather.domain.valueobjects;
 
 public class City {
     private final String name;
@@ -17,3 +17,4 @@ public class City {
         return coordinates;
     }
 }
+

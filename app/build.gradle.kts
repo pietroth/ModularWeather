@@ -9,6 +9,9 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+    // Spring Boot for a simple web server serving static routes.
+    id("org.springframework.boot") version "3.3.7"
+    id("io.spring.dependency-management") version "1.1.6"
 }
 
 repositories {
@@ -21,6 +24,8 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.jackson.databind)
     implementation("io.github.cdimascio:java-dotenv:5.2.2")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 }
 
 testing {
@@ -42,5 +47,6 @@ java {
 
 application {
     // Define the main class for the application.
-    mainClass = "br.pietroth.App"
+    mainClass = "br.pietroth.modularweather.App"
 }
+
