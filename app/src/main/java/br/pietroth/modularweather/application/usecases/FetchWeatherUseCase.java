@@ -8,7 +8,7 @@ import br.pietroth.modularweather.domain.valueobjects.WeatherContent;
 import br.pietroth.modularweather.domain.valueobjects.WindData;
 
 public class FetchWeatherUseCase {
-    private WeatherProvider weatherProvider;
+    private final WeatherProvider weatherProvider;
 
     public FetchWeatherUseCase(WeatherProvider weatherProvider) {
         this.weatherProvider = weatherProvider;
@@ -34,8 +34,4 @@ public class FetchWeatherUseCase {
         return weatherProvider.getWindDataAsync(city);
     }
 
-    public WeatherProvider getWeatherProvider() {
-        return weatherProvider;
-    }
 }
-
