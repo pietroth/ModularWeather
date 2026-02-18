@@ -2,22 +2,22 @@ package br.pietroth.modularweather.domain.valueobjects;
 
 public class WeatherContent {
     private final String description;
-    private final TemperatureData temperatureData;
-    private final WindData windData;
+    private final TemperatureInformations temperatureData;
+    private final WindInformations windData;
 
     public WeatherContent(
-        String description, TemperatureData temperatureData, WindData windData) 
+        String description, TemperatureInformations temperatureData, WindInformations windData) 
     {
         this.description = description;
         this.temperatureData = temperatureData;
         this.windData = windData;
     }
 
-    public TemperatureData getTemperatureData() {
+    public TemperatureInformations getTemperatureInformations() {
         return temperatureData;
     }
 
-    public WindData getWindData() {
+    public WindInformations getWindInformations() {
         return windData;
     }
 
@@ -25,4 +25,5 @@ public class WeatherContent {
         return description;
     }
 }
+
 

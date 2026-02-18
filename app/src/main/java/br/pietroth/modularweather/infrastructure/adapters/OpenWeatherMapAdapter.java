@@ -7,9 +7,9 @@ import java.util.Map;
 
 import br.pietroth.modularweather.domain.services.UserKeyStore;
 import br.pietroth.modularweather.domain.services.WeatherProvider;
-import br.pietroth.modularweather.domain.valueobjects.TemperatureData;
+import br.pietroth.modularweather.domain.valueobjects.TemperatureInformations;
 import br.pietroth.modularweather.domain.valueobjects.WeatherContent;
-import br.pietroth.modularweather.domain.valueobjects.WindData;
+import br.pietroth.modularweather.domain.valueobjects.WindInformations;
 import br.pietroth.modularweather.infrastructure.SimpleHttpClient;
 import br.pietroth.modularweather.infrastructure.SimpleJsonParser;
 import br.pietroth.modularweather.infrastructure.models.OpenWeatherMapResponse;
@@ -60,14 +60,14 @@ public class OpenWeatherMapAdapter implements WeatherProvider {
 
                     OpenWeatherMapResponse response = parser.parse(json);
 
-                    TemperatureData tempData = new TemperatureData(
+                    TemperatureInformations tempData = new TemperatureInformations(
                         // Fahrenheit to Celsius
                         (response.main.temp - 32) * 5 / 9,
                         (response.main.temp_max - 32) * 5 / 9,
                         (response.main.temp_min - 32) * 5 / 9
                     );
 
-                    WindData windData = new WindData(
+                    WindInformations windData = new WindInformations(
                         response.wind.speed,
                         response.wind.deg
                     );
@@ -86,7 +86,7 @@ public class OpenWeatherMapAdapter implements WeatherProvider {
     }
 
     @Override
-    public CompletableFuture<TemperatureData> getTemperatureAsync(String city) {
+    public CompletableFuture<TemperatureInformations> getTemperatureAsync(String city) {
         return fetchCityWeather(city)
             .thenApply(json -> {
                 try {
@@ -96,7 +96,7 @@ public class OpenWeatherMapAdapter implements WeatherProvider {
 
                     OpenWeatherMapResponse response = parser.parse(json);
 
-                    return new TemperatureData(
+                    return new TemperatureInformations(
                         // Fahrenheit to Celsius
                         (response.main.temp - 32) * 5 / 9,
                         (response.main.temp_max - 32) * 5 / 9,
@@ -111,7 +111,7 @@ public class OpenWeatherMapAdapter implements WeatherProvider {
     }
 
     @Override
-    public CompletableFuture<WindData> getWindDataAsync(String city) {
+    public CompletableFuture<WindInformations> getWindInformationsAsync(String city) {
         return fetchCityWeather(city)
             .thenApply(json -> {
                 try {
@@ -121,7 +121,7 @@ public class OpenWeatherMapAdapter implements WeatherProvider {
 
                     OpenWeatherMapResponse response = parser.parse(json);
 
-                    return new WindData(
+                    return new WindInformations(
                         response.wind.speed,
                         response.wind.deg
                     );
@@ -153,3 +153,4 @@ public class OpenWeatherMapAdapter implements WeatherProvider {
             });
     }
 }
+

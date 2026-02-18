@@ -1,10 +1,10 @@
 package br.pietroth.modularweather.domain.valueobjects;
 
-public class WindData {
+public class WindInformations {
     private final double speed;
     private final double direction;
 
-    public WindData(double speed, double direction) {
+    public WindInformations(double speed, double direction) {
         this.speed = speed;
         this.direction = direction;
     }
@@ -17,4 +17,5 @@ public class WindData {
         return direction;
     }
 }
+
 
