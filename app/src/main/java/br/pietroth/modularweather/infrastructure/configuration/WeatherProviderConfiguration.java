@@ -7,6 +7,7 @@ import br.pietroth.modularweather.application.usecases.FetchWindContentUseCase;
 import br.pietroth.modularweather.domain.services.UserKeyStore;
 import br.pietroth.modularweather.domain.services.WeatherProvider;
 import br.pietroth.modularweather.infrastructure.PropertiesUserKeyStore;
+import br.pietroth.modularweather.infrastructure.WeatherProviderFactory;
 import br.pietroth.modularweather.infrastructure.adapters.OpenWeatherMapAdapter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,11 @@ public class WeatherProviderConfiguration {
     @Bean
     public WeatherProvider weatherProvider(UserKeyStore<String, String> userKeyStore) {
         return new OpenWeatherMapAdapter(userKeyStore, DEFAULT_API_PROP);
+    }
+
+    @Bean
+    public WeatherProviderFactory weatherProviderFactory() {
+        return new WeatherProviderFactory();
     }
 
     @Bean
