@@ -6,8 +6,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.concurrent.CompletableFuture;
+
+import br.pietroth.modularweather.infrastructure.models.configuration.Url;
+
 import java.util.Map;
-import br.pietroth.modularweather.infrastructure.models.Url;
 
 public class SimpleHttpClient {
     private final Url url;

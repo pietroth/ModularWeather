@@ -2,7 +2,8 @@ package br.pietroth.modularweather.infrastructure;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.Properties;
 
@@ -12,25 +13,24 @@ public class PropertiesUserKeyStore
     implements UserKeyStore<String, String> {
 
     private Properties properties;
-    private final String configFilePath = "./properties/config.properties";
+    private final String configFilePath;
 
     public PropertiesUserKeyStore() {
         this.properties = new Properties();
         
-        try (InputStream is = getClass()
-                .getClassLoader()
-                .getResourceAsStream("config.properties")) {
-
-            if (is == null) {
-                throw new RuntimeException("config.properties não encontrado");
+        String userHome = System.getProperty("user.home");
+        this.configFilePath = userHome + "/ModularWeather/config.properties";
+        
+        try {
+            if (Files.exists(Paths.get(configFilePath))) {
+                properties.load(Files.newInputStream(Paths.get(configFilePath)));
+            } else {
+                Files.createDirectories(Paths.get(configFilePath).getParent());
+                saveProperties();
             }
-
-            properties.load(is);
-
         } catch (IOException e) {
             throw new RuntimeException("Erro ao carregar config.properties", e);
         }
-
     }
     
     @Override
@@ -41,13 +41,18 @@ public class PropertiesUserKeyStore
 
     @Override
     public void register(String key, String value) {
+        if (value == null) {
+            throw new IllegalArgumentException("Valor da chave não pode ser nulo.");
+        }
         properties.setProperty(key, value);
+        saveProperties();
+    }
 
+    private void saveProperties() {
         try (FileOutputStream fos = new FileOutputStream(configFilePath)) {
             properties.store(fos, "User configuration file");
-
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Erro ao salvar config.properties", e);
         }
     }
 

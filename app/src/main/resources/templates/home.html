@@ -4,104 +4,276 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Modular Weather</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="https://unpkg.com/weather-iconic/dist/weather-iconic.css">
+    <link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
   </head>
   <body class="bg-light">
+    <!-- Settings button -->
+    <button type="button"
+            class="btn btn btn-link position-fixed top-0 end-0 m-4"
+            data-bs-toggle="modal"
+            data-bs-target="#configModal"
+            style="z-index:1050">
+      <i class="bi bi-gear-fill"></i>
+    </button>
+
     <main class="container py-5">
       <div class="row justify-content-center">
         <div class="col-12 col-lg-8">
-          <div class="card shadow-sm border-0">
+          <article class="card shadow-sm border-0">
             <div class="card-body p-4">
               <h1 class="h3 mb-4">Previsão do tempo com Modular Weather</h1>
 
-              <form method="get" action="/" class="row g-2 align-items-end mb-4">
-                <div class="col-12 col-md-6">
+              <form method="get" action="/" class="row g-2 align-items-end mb-4" id="searchForm">
+                <div class="col-12 col-md-5">
                   <label for="city" class="form-label">Cidade</label>
-                  <input
-                    id="city"
-                    name="city"
-                    type="text"
-                    class="form-control"
-                    placeholder="Ex: Sao Paulo"
-                    th:value="${city}"
-                  />
+                  <input id="city" name="city" type="text" class="form-control" placeholder="Ex: Sao Paulo" th:value="${city}" />
                 </div>
+
                 <div class="col-12 col-md-3">
                   <label for="adapter" class="form-label">Adapter</label>
-                  <select id="adapter" name="adapter" class="form-select">
-                    <option value="OPEN_WEATHER_MAP" th:selected="${adapter == 'OPEN_WEATHER_MAP'}">OpenWeatherMap</option>
+                  <select id="adapter" name="adapter" class="form-select" onchange="loadAdapterParameters()">
+                    <option th:each="adapterOption : ${adapters}"
+                            th:value="${adapterOption.name()}"
+                            th:selected="${adapter == adapterOption.name()}"
+                            th:text="${adapterOption.getDisplayName()}">
+                    </option>
                   </select>
                 </div>
-                <div class="col-12 col-md-3 d-grid">
+
+                <div class="col-12 col-md-2">
+                  <button type="button" class="btn btn-link border-0 w-50" data-bs-toggle="modal" data-bs-target="#apiParamsModal">
+                    <i class="bi bi-sliders"></i> <!-- Parameters settings -->
+                  </button>
+                </div>
+
+                <div class="col-12 col-md-2 d-grid">
                   <button type="submit" class="btn btn-primary">Buscar</button>
                 </div>
+                <div id="paramHiddenFields"></div>
               </form>
 
-              <div th:if="${hasError}" class="alert alert-danger" role="alert">
-                <h2 class="h6 mb-2">Falha ao obter o clima.</h2>
-                <pre class="mb-0" th:text="${errorMessage}"></pre>
+              <div th:if="${keySaved}" class="alert alert-success">Chave salva com sucesso.</div>
+              <div th:if="${keyError}" class="alert alert-warning">Não foi possível salvar a chave. Verifique os campos.</div>
+              <div th:if="${apiKeyMissing}" class="alert alert-info">
+                Chave RapidAPI não configurada. Clique na engrenagem para cadastrar a chave antes de consultar o clima.
               </div>
 
-              <div th:if="${!hasError}" class="mt-2">
+              <section th:if="${!apiKeyMissing and hasError}" class="alert alert-danger">
+                <h2 class="h6 mb-2">Falha ao obter o clima.</h2>
+                <pre class="mb-0" th:text="${errorMessage}"></pre>
+              </section>
+
+              <section th:if="${!apiKeyMissing and !hasError}" class="mt-2">
                 <h2 class="h5" th:text="'Clima em ' + ${city}"></h2>
+
                 <div class="d-flex align-items-center gap-2 mb-3">
                   <i id="weather-icon" class="weather weather-na fs-4" aria-hidden="true"></i>
                   <h3 id="weather-description" class="h6 mb-0" th:text="${#strings.capitalize(weatherDescription)}"></h3>
                 </div>
 
-                <h4 class="h6 mt-3 mb-2">Temperatura</h4>
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered align-middle mb-3">
-                    <tbody>
-                      <tr>
-                        <th scope="row">Média</th>
-                        <td th:text="${#numbers.formatDecimal(tempCurrent, 1, 2)} + ' C'"></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Máxima</th>
-                        <td th:text="${#numbers.formatDecimal(tempMax, 1, 2)} + ' C'"></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Mínima</th>
-                        <td th:text="${#numbers.formatDecimal(tempMin, 1, 2)} + ' C'"></td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                <div class="row">
+                  <div class="col-12 col-md-6 mb-3">
+                    <h4 class="h6">Temperatura</h4>
+                    <dl class="row mb-0">
+                      <dt class="col-5">Média</dt>
+                      <dd class="col-7" th:text="${#numbers.formatDecimal(tempCurrent, 1, 2)} + ' °C'"></dd>
 
-                <h4 class="h6 mt-3 mb-2">Vento</h4>
-                <div class="table-responsive">
-                  <table class="table table-striped table-bordered align-middle mb-0">
-                    <tbody>
-                      <tr>
-                        <th scope="row">Velocidade</th>
-                        <td th:text="${windSpeed} + ' km/h'"></td>
-                      </tr>
-                      <tr>
-                        <th scope="row">Direção</th>
-                        <td th:text="${windDirection} + ' graus'"></td>
-                      </tr>
-                    </tbody>
-                  </table>
+                      <dt class="col-5">Máxima</dt>
+                      <dd class="col-7" th:text="${#numbers.formatDecimal(tempMax, 1, 2)} + ' °C'"></dd>
+
+                      <dt class="col-5">Mínima</dt>
+                      <dd class="col-7" th:text="${#numbers.formatDecimal(tempMin, 1, 2)} + ' °C'"></dd>
+                    </dl>
+                  </div>
+
+                  <div class="col-12 col-md-6 mb-3">
+                    <h4 class="h6">Vento</h4>
+                    <dl class="row mb-0">
+                      <dt class="col-6">Velocidade</dt>
+                      <dd class="col-6" th:text="${windSpeed} + ' km/h'"></dd>
+
+                      <dt class="col-6">Direção</dt>
+                      <dd class="col-6" th:text="${windDirection} + '°'"></dd>
+                    </dl>
+                  </div>
                 </div>
-              </div>
+              </section>
+
             </div>
-          </div>
+          </article>
         </div>
       </div>
     </main>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-    ></script>
+    <!-- RapidAPI Key Modal -->
+    <div class="modal fade" id="configModal" tabindex="-1" aria-labelledby="configModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <form method="post" action="/config/keys" class="p-0">
+            <div class="modal-header">
+              <h2 class="modal-title h5 mb-0" id="configModalLabel">Registrar chave
+                <img width="100" src="/images/rapidapi_logo.png" alt="RapidAPI"></h2>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+
+            <div class="modal-body">
+              <input type="hidden" name="adapter" value="OPEN_WEATHER_BY_QUANTUM_APIs" />
+              <input type="hidden" name="city" th:value="${city}" />
+
+              <label for="apiKey" class="form-label">Chave RapidAPI</label>
+                <div class="input-group mb-0">
+                <input id="apiKey" name="apiKey" type="password" class="form-control" placeholder="Digite sua chave RapidAPI"
+                     th:value="${rapidApiKey}" required th:disabled="${!apiKeyMissing}" />
+                <button class="btn btn-outline-secondary" type="button" id="toggleVisibilityBtn" onclick="toggleKeyVisibility()">
+                  <i class="bi bi-eye-fill" id="eyeIcon"></i>
+                </button>
+                <button class="btn btn-outline-secondary" type="button" id="editKeyBtn" onclick="toggleEditMode()"
+                        th:text="${apiKeyMissing} ? 'Cancelar' : 'Editar'">Editar</button>
+                </div>
+
+                <script>
+                function toggleKeyVisibility() {
+                  const input = document.getElementById('apiKey');
+                  input.type = input.type === 'password' ? 'text' : 'password';
+                }
+                </script>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary" id="saveKeyBtn" th:disabled="${!apiKeyMissing}">Salvar chave</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function toggleEditMode() {
+        const input = document.getElementById('apiKey');
+        const editBtn = document.getElementById('editKeyBtn');
+        const saveBtn = document.getElementById('saveKeyBtn');
+
+        input.disabled = !input.disabled;
+        saveBtn.disabled = input.disabled;
+        editBtn.textContent = input.disabled ? 'Editar' : 'Cancelar';
+        if (!input.disabled) input.focus();
+      }
+    </script>
+
+    <!-- API Parameters Modal -->
+    <div class="modal fade" id="apiParamsModal" tabindex="-1" aria-labelledby="apiParamsModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title h5 mb-0" id="apiParamsModalLabel">Configurar Parâmetros da API</h2>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+
+          <div class="modal-body">
+            <div id="parametersContainer"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-primary" onclick="saveApiParams()">Salvar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/weather-icons.js"></script>
+
+    <script>
+      let currentParameters = [];
+
+      document.addEventListener('DOMContentLoaded', function() {
+        loadAdapterParameters();
+        renderParameterFields();
+      });
+
+      async function loadAdapterParameters() {
+        const adapter = document.getElementById('adapter').value;
+        try {
+          const response = await fetch(`/api/adapter-parameters?adapter=${encodeURIComponent(adapter)}`);
+          if (response.ok) {
+            currentParameters = await response.json();
+            renderParameterFields();
+          }
+        } catch (error) {
+          console.error('Erro ao carregar parâmetros:', error);
+        }
+      }
+
+      function renderParameterFields() {
+        const container = document.getElementById('parametersContainer');
+        container.innerHTML = '';
+
+        currentParameters.forEach(param => {
+          const div = document.createElement('div');
+          div.className = 'mb-3';
+
+          const fieldName = `param_${param.name}`;
+          const currentValue = getParamValue(param.name);
+
+          let inputHTML = '';
+          if (param.name.toLowerCase() === 'units') {
+            inputHTML = `
+              <label for="${fieldName}" class="form-label">${capitalizeFirstLetter(param.name)}</label>
+              <select id="${fieldName}" name="${fieldName}" class="form-select">
+                <option value="metric" ${currentValue === 'metric' ? 'selected' : ''}>Métrico (Celsius, km/h)</option>
+                <option value="imperial" ${currentValue === 'imperial' ? 'selected' : ''}>Imperial (Fahrenheit, mph)</option>
+              </select>
+            `;
+          } else {
+            inputHTML = `
+              <label for="${fieldName}" class="form-label">${capitalizeFirstLetter(param.name)}</label>
+              <input id="${fieldName}" type="text" class="form-control" placeholder="Ex: en, pt, es" value="${currentValue || param.value || ''}" />
+            `;
+          }
+
+          div.innerHTML = inputHTML;
+          container.appendChild(div);
+        });
+      }
+
+      function getParamValue(paramName) {
+        const fieldName = `param_${paramName}`;
+        const hiddenField = document.querySelector(`input[name="${fieldName}"], select[name="${fieldName}"]`);
+        return hiddenField ? hiddenField.value : null;
+      }
+
+      function saveApiParams() {
+        const paramHiddenFields = document.getElementById('paramHiddenFields');
+        paramHiddenFields.innerHTML = '';
+
+        currentParameters.forEach(param => {
+          const fieldName = `param_${param.name}`;
+          const input = document.querySelector(`input[name="${fieldName}"], select[name="${fieldName}"]`);
+          
+          if (input) {
+            const hiddenInput = document.createElement('input');
+            hiddenInput.type = 'hidden';
+            hiddenInput.name = fieldName;
+            hiddenInput.value = input.value;
+            paramHiddenFields.appendChild(hiddenInput);
+          }
+        });
+
+        const modal = bootstrap.Modal.getInstance(document.getElementById('apiParamsModal'));
+        modal.hide();
+
+        // Submeter o formulário após salvar
+        document.getElementById('searchForm').submit();
+      }
+
+      function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+      }
+    </script>
   </body>
 </html>

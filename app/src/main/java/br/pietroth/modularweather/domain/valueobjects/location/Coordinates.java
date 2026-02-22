@@ -1,4 +1,4 @@
-package br.pietroth.modularweather.domain.valueobjects;
+package br.pietroth.modularweather.domain.valueobjects.location;
 
 public class Coordinates {
     private final double latitude;

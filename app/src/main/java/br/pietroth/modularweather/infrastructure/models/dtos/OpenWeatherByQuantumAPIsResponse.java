@@ -1,11 +1,11 @@
-package br.pietroth.modularweather.infrastructure.models;
+package br.pietroth.modularweather.infrastructure.models.dtos;
 
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class OpenWeatherMapResponse {
+public class OpenWeatherByQuantumAPIsResponse {
     public Main main;
     public Wind wind;
     public List<Weather> weather;

@@ -1,4 +1,4 @@
-package br.pietroth.modularweather.domain.valueobjects;
+package br.pietroth.modularweather.domain.valueobjects.weather;
 
 public class WeatherContent {
     private final String description;

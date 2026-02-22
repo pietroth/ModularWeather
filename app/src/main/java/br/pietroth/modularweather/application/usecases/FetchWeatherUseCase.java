@@ -3,7 +3,7 @@ package br.pietroth.modularweather.application.usecases;
 import java.util.concurrent.CompletableFuture;
 
 import br.pietroth.modularweather.domain.services.WeatherProvider;
-import br.pietroth.modularweather.domain.valueobjects.WeatherContent;
+import br.pietroth.modularweather.domain.valueobjects.weather.WeatherContent;
 
 public class FetchWeatherUseCase {
     private final WeatherProvider weatherProvider;

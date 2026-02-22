@@ -1,4 +1,4 @@
-package br.pietroth.modularweather.infrastructure.models;
+package br.pietroth.modularweather.infrastructure.models.configuration;
 
 public class Url {
     private String url;
